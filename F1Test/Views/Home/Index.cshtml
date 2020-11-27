@@ -1,0 +1,14 @@
+﻿@model Team
+
+<div id="teamList">
+    @(Html.Kendo().Grid<Team>()
+        .Name("teamsGrid")
+        .Columns(columns =>
+        {
+            columns.Select().Width(75).HtmlAttributes(new { @class = "checkbox-align" }).HeaderHtmlAttributes(new { @class = "checkbox-align" });
+            columns.Bound(t => t.Name);
+            columns.Bound(p => p.FoundationYear).Title("Foundation Year").Width(105);
+            columns.Bound(p => p.Titles).Title("Titles").Width(130);
+        })
+    )
+</div> 
