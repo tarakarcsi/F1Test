@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Telerik.UI.for.AspNet.Core.Trial" Version="2020.3.1118" />
   </ItemGroup>
 
