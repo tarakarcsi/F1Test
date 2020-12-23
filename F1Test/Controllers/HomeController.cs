@@ -1,6 +1,8 @@
-﻿using F1Test.Models;
+﻿using F1Test.Interfaces;
+using F1Test.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace F1Test.Controllers
@@ -8,10 +10,12 @@ namespace F1Test.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ITeamSvc teamSvc;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITeamSvc teamSvc)
         {
             _logger = logger;
+            this.teamSvc = teamSvc;
         }
 
         public IActionResult Index()
@@ -19,6 +23,11 @@ namespace F1Test.Controllers
             var model = new Team();
 
             return View(model);
+        }
+
+        public List<Team> GetTeamsGridData()
+        {
+            return teamSvc.LoadTeams();
         }
 
         public IActionResult Privacy()

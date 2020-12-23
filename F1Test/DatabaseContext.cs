@@ -1,6 +1,11 @@
-﻿using F1Test.Models;
+﻿using Dapper;
+using F1Test.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
 
 namespace F1Test
 {
@@ -8,7 +13,7 @@ namespace F1Test
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = "MyDb.db" };
+            var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = "F1TestDB.db" };
             var connectionString = connectionStringBuilder.ToString();
             var connection = new SqliteConnection(connectionString);
 
@@ -61,6 +66,28 @@ namespace F1Test
             //    context.AddRange(team1, team2, team3);
             //    context.SaveChanges();
             //}
+        }
+
+        public static List<Team> LoadTeams()
+        {
+            using (IDbConnection cnn = new SqliteConnection(LoadConnectionString()))
+            {
+                var teams = cnn.Query<Team>("select * from Team", new DynamicParameters());
+                return teams.ToList();
+            }
+        }
+
+        public static void SaveTeam(Team team)
+        {
+            using (IDbConnection cnn = new SqliteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("insert into Team (Id, Name, FoundationYear, Titles, HasPayed) values (@Id, @Name, @FoundationYear, @Titles, @HasPayed)", team);
+            }
+        }
+
+        public static string LoadConnectionString(string id = "Default")
+        {
+            return ConfigurationManager.ConnectionStrings[id].ConnectionString; 
         }
     }
 }
